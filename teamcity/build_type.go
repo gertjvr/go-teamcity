@@ -231,7 +231,14 @@ func newBuildTypeService(base *sling.Sling, httpClient *http.Client) *BuildTypeS
 func (s *BuildTypeService) Create(projectID string, buildType *BuildType) (*BuildTypeReference, error) {
 	var created BuildTypeReference
 
-	err := s.restHelper.post("", buildType, &created, "Build Type")
+	var path string  
+	if (buildType.IsTemplate) {
+		path = "/templates"
+	} else {
+		path = ""
+	}
+
+	err := s.restHelper.post(path, buildType, &created, "Build Type")
 
 	if err != nil {
 		return nil, err
